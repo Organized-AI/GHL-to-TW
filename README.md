@@ -103,6 +103,8 @@ See [Integration Guide](docs/INTEGRATION_GUIDE.md) for detailed setup instructio
 - **[Data Audit Workflow](docs/DATA_AUDIT_WORKFLOW.md)** - End-to-end audit examples
 - **[Meta Ads Tools Reference](META_API_NOTES.md)** - Complete tool reference (29 tools)
 - **[Streamable HTTP Setup](STREAMABLE_HTTP_SETUP.md)** - Advanced HTTP transport
+- **[Triple Whale API Integration](docs/triple_whale/TRIPLE_WHALE_API.md)** - Full-funnel attribution with CRM data
+- **[GoHighLevel Quick Start](docs/triple_whale/GHL_INTEGRATION_QUICKSTART.md)** - CRM to Triple Whale sync
 
 ## 🎯 Use Cases
 
@@ -124,6 +126,11 @@ See [Integration Guide](docs/INTEGRATION_GUIDE.md) for detailed setup instructio
 ### Creative Performance Testing
 ```
 "Show me the creative performance for campaign X and suggest improvements for underperforming ads"
+```
+
+### Full-Funnel CRM Attribution (Triple Whale)
+```
+"Connect my GoHighLevel CRM pipeline to Triple Whale to track which ads produce qualified leads and closed deals"
 ```
 
 ## 🏭️ Repository Structure
