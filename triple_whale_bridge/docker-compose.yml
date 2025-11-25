@@ -1,0 +1,49 @@
+# Docker Compose for Triple Whale Bridge
+# Provides easy local development and deployment
+
+version: '3.8'
+
+services:
+  triple-whale-bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: triple-whale-bridge
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      # Required: Triple Whale API key
+      - TRIPLE_WHALE_API_KEY=${TRIPLE_WHALE_API_KEY}
+
+      # Optional: Webhook security
+      - WEBHOOK_SECRET=${WEBHOOK_SECRET:-}
+      - GHL_WEBHOOK_SECRET=${GHL_WEBHOOK_SECRET:-}
+
+      # Optional: Custom config path (mount volume below)
+      - PIPELINE_CONFIG_PATH=${PIPELINE_CONFIG_PATH:-}
+
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      # Mount custom pipeline config if needed
+      - ./config:/app/config:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Optional: Redis for caching and deduplication (future enhancement)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: triple-whale-bridge-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   restart: unless-stopped
+
+# volumes:
+#   redis_data:

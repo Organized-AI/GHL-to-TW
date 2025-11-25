@@ -1,0 +1,379 @@
+# =============================================================================
+# GoHighLevel to Triple Whale Pipeline Stage Mappings
+# =============================================================================
+#
+# This configuration file defines how GoHighLevel pipeline stages map to
+# Triple Whale attribution events. Customize this file to match your
+# specific sales pipeline structure.
+#
+# Triple Whale Event Types:
+#   - lead: Initial lead capture (form submission, inbound inquiry)
+#   - mql: Marketing Qualified Lead (engaged, fits ICP)
+#   - sql: Sales Qualified Lead (budget/authority/need confirmed)
+#   - book_demo: Demo or meeting scheduled
+#   - opportunity: Active deal/proposal stage
+#   - custom: Any custom conversion event
+#
+# =============================================================================
+
+# Global settings
+settings:
+  # Default currency for monetary values
+  default_currency: "USD"
+
+  # Whether to send events for stages not explicitly mapped
+  send_unmapped_stages: true
+
+  # Default event type for unmapped stages
+  default_event_type: "custom"
+
+  # Include company name in properties when available
+  include_company_name: true
+
+  # Calculate days in pipeline from opportunity creation
+  calculate_days_in_pipeline: true
+
+# =============================================================================
+# Pipeline Definitions
+# =============================================================================
+#
+# Define each pipeline by name (as it appears in GoHighLevel).
+# You can have multiple pipelines with different stage mappings.
+
+pipelines:
+  # -------------------------------------------------------------------------
+  # Main Sales Pipeline (Default/Example)
+  # -------------------------------------------------------------------------
+  "Main Sales Pipeline":
+    description: "Primary B2B sales pipeline"
+    stages:
+      # Early funnel stages
+      "New Lead":
+        event_type: "lead"
+        description: "Initial lead capture from any source"
+        value_multiplier: 0.0  # No attributed value yet
+
+      "Contacted":
+        event_type: "lead"
+        description: "Lead has been contacted by sales"
+        value_multiplier: 0.05  # 5% of deal value attributed
+
+      "Qualified":
+        event_type: "mql"
+        description: "Marketing qualified - engaged and fits ICP"
+        value_multiplier: 0.10  # 10% of deal value attributed
+
+      # Mid funnel stages
+      "Discovery Call Scheduled":
+        event_type: "book_demo"
+        description: "Discovery call booked"
+        value_multiplier: 0.15
+
+      "Discovery Complete":
+        event_type: "sql"
+        description: "Sales qualified - BANT confirmed"
+        value_multiplier: 0.25
+
+      "Demo Scheduled":
+        event_type: "book_demo"
+        description: "Product demo scheduled"
+        value_multiplier: 0.30
+
+      "Demo Complete":
+        event_type: "sql"
+        description: "Demo completed, evaluating"
+        value_multiplier: 0.40
+
+      # Late funnel stages
+      "Proposal Sent":
+        event_type: "opportunity"
+        description: "Proposal/quote delivered"
+        value_multiplier: 0.50
+
+      "Negotiation":
+        event_type: "opportunity"
+        description: "Active negotiation"
+        value_multiplier: 0.70
+
+      "Contract Sent":
+        event_type: "opportunity"
+        description: "Contract sent for signature"
+        value_multiplier: 0.85
+
+      # Closed stages
+      "Closed Won":
+        event_type: "custom"
+        custom_event_name: "closed_won"
+        description: "Deal won - revenue recognized"
+        value_multiplier: 1.0  # Full deal value
+        include_revenue: true
+
+      "Closed Lost":
+        event_type: "custom"
+        custom_event_name: "closed_lost"
+        description: "Deal lost"
+        value_multiplier: 0.0
+        include_revenue: false
+
+  # -------------------------------------------------------------------------
+  # Lead Nurture Pipeline
+  # -------------------------------------------------------------------------
+  "Lead Nurture":
+    description: "Marketing nurture pipeline for cold/warm leads"
+    stages:
+      "Cold Lead":
+        event_type: "lead"
+        value_multiplier: 0.0
+
+      "Engaged":
+        event_type: "lead"
+        description: "Opened emails, visited website"
+        value_multiplier: 0.02
+
+      "Warm Lead":
+        event_type: "mql"
+        description: "Multiple engagements, showing intent"
+        value_multiplier: 0.05
+
+      "Hot Lead":
+        event_type: "mql"
+        description: "High intent, ready for sales"
+        value_multiplier: 0.10
+
+      "Sent to Sales":
+        event_type: "sql"
+        description: "Handed off to sales team"
+        value_multiplier: 0.15
+
+  # -------------------------------------------------------------------------
+  # Enterprise Sales Pipeline
+  # -------------------------------------------------------------------------
+  "Enterprise Pipeline":
+    description: "High-value enterprise deals with longer sales cycle"
+    stages:
+      "Inbound Interest":
+        event_type: "lead"
+        value_multiplier: 0.0
+
+      "Initial Outreach":
+        event_type: "lead"
+        value_multiplier: 0.02
+
+      "Stakeholder Identified":
+        event_type: "mql"
+        value_multiplier: 0.05
+
+      "Champion Engaged":
+        event_type: "mql"
+        description: "Internal champion identified and engaged"
+        value_multiplier: 0.10
+
+      "Discovery Meeting":
+        event_type: "book_demo"
+        value_multiplier: 0.15
+
+      "Technical Evaluation":
+        event_type: "sql"
+        value_multiplier: 0.25
+
+      "POC/Trial":
+        event_type: "sql"
+        description: "Proof of concept or trial in progress"
+        value_multiplier: 0.35
+
+      "Business Case":
+        event_type: "opportunity"
+        description: "Building internal business case"
+        value_multiplier: 0.45
+
+      "Procurement":
+        event_type: "opportunity"
+        description: "In procurement process"
+        value_multiplier: 0.60
+
+      "Legal Review":
+        event_type: "opportunity"
+        value_multiplier: 0.75
+
+      "Final Approval":
+        event_type: "opportunity"
+        value_multiplier: 0.90
+
+      "Closed Won":
+        event_type: "custom"
+        custom_event_name: "enterprise_closed_won"
+        value_multiplier: 1.0
+        include_revenue: true
+
+      "Closed Lost":
+        event_type: "custom"
+        custom_event_name: "enterprise_closed_lost"
+        value_multiplier: 0.0
+
+  # -------------------------------------------------------------------------
+  # Appointment/Services Pipeline
+  # -------------------------------------------------------------------------
+  "Services Pipeline":
+    description: "Service-based business appointments"
+    stages:
+      "Inquiry":
+        event_type: "lead"
+        value_multiplier: 0.0
+
+      "Consultation Booked":
+        event_type: "book_demo"
+        value_multiplier: 0.25
+
+      "Consultation Complete":
+        event_type: "sql"
+        value_multiplier: 0.50
+
+      "Proposal Accepted":
+        event_type: "opportunity"
+        value_multiplier: 0.75
+
+      "Service Scheduled":
+        event_type: "custom"
+        custom_event_name: "service_scheduled"
+        value_multiplier: 0.90
+
+      "Completed":
+        event_type: "custom"
+        custom_event_name: "service_completed"
+        value_multiplier: 1.0
+        include_revenue: true
+
+# =============================================================================
+# Contact Event Mappings
+# =============================================================================
+#
+# Map GoHighLevel contact events (not pipeline-related) to Triple Whale events.
+
+contact_events:
+  # Tag-based triggers
+  tags:
+    "lead-magnet-download":
+      event_type: "lead"
+      properties:
+        source: "lead_magnet"
+
+    "webinar-registered":
+      event_type: "lead"
+      properties:
+        source: "webinar"
+
+    "demo-requested":
+      event_type: "book_demo"
+      properties:
+        source: "demo_request"
+
+    "pricing-viewed":
+      event_type: "mql"
+      properties:
+        intent_signal: "pricing"
+
+    "trial-started":
+      event_type: "sql"
+      properties:
+        source: "trial"
+
+    "customer":
+      event_type: "custom"
+      custom_event_name: "became_customer"
+
+  # Source-based mappings
+  sources:
+    "facebook":
+      properties:
+        medium: "paid_social"
+        source: "facebook"
+
+    "google":
+      properties:
+        medium: "paid_search"
+        source: "google"
+
+    "linkedin":
+      properties:
+        medium: "paid_social"
+        source: "linkedin"
+
+    "organic":
+      properties:
+        medium: "organic"
+
+    "referral":
+      properties:
+        medium: "referral"
+
+# =============================================================================
+# Field Mappings
+# =============================================================================
+#
+# Define how GoHighLevel fields map to Triple Whale event properties.
+
+field_mappings:
+  # Contact fields -> Properties
+  contact:
+    company_name: "company_name"
+    attribution_source: "source"
+    source: "source"
+
+  # Opportunity fields -> Properties
+  opportunity:
+    pipeline_name: "pipeline_name"
+    pipeline_stage: "pipeline_stage"
+    opportunity_name: "opportunity_name"
+    assigned_to: "assigned_to"
+    lead_value: "lead_value"
+    monetary_value: "value"
+
+  # Custom field mappings (GHL custom field key -> TW property)
+  custom_fields:
+    "utm_source": "source"
+    "utm_medium": "medium"
+    "utm_campaign": "campaign"
+    "lead_source": "source"
+    "deal_size": "lead_value"
+    "industry": "industry"
+
+# =============================================================================
+# Value Calculation Rules
+# =============================================================================
+
+value_rules:
+  # How to calculate attributed value for each event
+  calculation_method: "weighted"  # Options: weighted, fixed, actual
+
+  # For weighted method: multiply deal value by stage multiplier
+  # For fixed method: use fixed values below
+  # For actual method: use actual deal value
+
+  fixed_values:
+    lead: 0
+    mql: 50
+    sql: 200
+    book_demo: 100
+    opportunity: 500
+    custom: 0  # Use actual value for custom events
+
+  # Minimum and maximum values to attribute
+  min_value: 0
+  max_value: 1000000
+
+# =============================================================================
+# Deduplication Rules
+# =============================================================================
+
+deduplication:
+  # Prevent duplicate events within time window
+  enabled: true
+
+  # Time window in seconds (don't send same event type for same contact)
+  window_seconds: 300  # 5 minutes
+
+  # Fields that constitute a unique event
+  unique_key_fields:
+    - "email"
+    - "event_type"
+    - "pipeline_stage"
