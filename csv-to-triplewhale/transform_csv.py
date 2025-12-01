@@ -37,7 +37,7 @@ load_dotenv()
 TW_API_KEY = os.getenv("TW_API_KEY", "")
 TW_SHOP_DOMAIN = os.getenv("TW_SHOP_DOMAIN", "rtt.com")
 DEFAULT_CURRENCY = os.getenv("DEFAULT_CURRENCY", "GBP")
-DEFAULT_ORDER_REVENUE = float(os.getenv("DEFAULT_ORDER_REVENUE", "150"))
+DEFAULT_ORDER_REVENUE = float(os.getenv("DEFAULT_ORDER_REVENUE", "0"))
 
 TW_ORDERS_ENDPOINT = "https://api.triplewhale.com/api/v2/data-in/orders"
 
