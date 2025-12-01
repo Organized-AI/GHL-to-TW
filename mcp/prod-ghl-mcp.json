@@ -1,0 +1,30 @@
+{
+  "name": "prod-ghl-mcp",
+  "description": "GoHighLevel MCP Server for RTT location - provides access to contacts, payments, opportunities",
+  "command": "npx",
+  "args": [
+    "-y",
+    "mcp-remote",
+    "https://services.leadconnectorhq.com/mcp/",
+    "--header",
+    "Authorization: Bearer ${GHL_API_KEY}",
+    "--header",
+    "locationId: ${GHL_LOCATION_ID}"
+  ],
+  "env": {
+    "GHL_API_KEY": "your_ghl_api_key_here",
+    "GHL_LOCATION_ID": "2atK5dRxfG7jh7sp7Yjo"
+  },
+  "tools": [
+    "contacts_get-contact",
+    "contacts_get-contacts",
+    "contacts_search",
+    "payments_get-order-by-id",
+    "payments_list-transactions",
+    "opportunities_search"
+  ],
+  "usage": {
+    "claude_desktop": "Add to ~/Library/Application Support/Claude/claude_desktop_config.json under mcpServers",
+    "claude_code": "Add to ~/.claude.json under mcpServers with type: stdio"
+  }
+}
