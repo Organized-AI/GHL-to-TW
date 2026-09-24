@@ -273,3 +273,7 @@ Made with ❤️ by [Organized AI](https://organized.ai)
 **Related Projects:**
 - [Data Audit Skill](https://github.com/Organized-AI/data-audit-skill)
 - [Pipeboard](https://pipeboard.co)
+
+---
+
+Maintained by Jordaaan Hill ([LinkedIn](https://www.linkedin.com/in/jordaaanhill)).
